@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
   const loginForm = document.getElementById('loginForm');
   const loginUsername = document.getElementById('loginUsername');
   const loginPassword = document.getElementById('loginPassword');
@@ -46,7 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!username || !password) {
       registerMessage.style.color = '#f44336';
-      registerMessage.textContent = 'Por favor, preencha todos os campos.';
+      registerMessage.textContent = 'Preencha todos os campos.';
+      return;
+    }
+
+    if (username.includes(' ') || password.includes(' ')) {
+      registerMessage.style.color = '#f44336';
+      registerMessage.textContent = 'Usuário e senha não podem conter espaços.';
       return;
     }
 
@@ -73,21 +78,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!username || !password) {
       loginMessage.style.color = '#f44336';
-      loginMessage.textContent = 'Por favor, preencha todos os campos.';
+      loginMessage.textContent = 'Preencha todos os campos.';
       return;
     }
 
-    let users = getUsers();
+    const users = getUsers();
 
-    if (users[username] && users[username] === password) {
-      loginMessage.style.color = 'lightgreen';
-      loginMessage.textContent = `Bem-vindo, ${username}! Redirecionando...`;
-      setTimeout(() => {
-        window.location.href = 'https://www.linkedin.com/in/marco-medeirosdev/';
-      }, 1000);
-    } else {
+    if (!users[username]) {
       loginMessage.style.color = '#f44336';
-      loginMessage.textContent = 'Usuário ou senha incorretos.';
+      loginMessage.textContent = 'Usuário não cadastrado.';
+      return;
     }
+
+    if (users[username] !== password) {
+      loginMessage.style.color = '#f44336';
+      loginMessage.textContent = 'Senha incorreta.';
+      return;
+    }
+
+    loginMessage.style.color = 'lightgreen';
+    loginMessage.textContent = `Bem-vindo, ${username}! Redirecionando...`;
+
+    setTimeout(() => {
+      window.location.href = 'https://www.linkedin.com/in/marco-medeirosdev/';
+    }, 1000);
   });
 });
